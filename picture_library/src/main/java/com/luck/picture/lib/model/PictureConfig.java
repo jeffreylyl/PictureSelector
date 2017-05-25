@@ -2,6 +2,7 @@ package com.luck.picture.lib.model;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 
 import com.luck.picture.lib.R;
 import com.luck.picture.lib.ui.PictureExternalPreviewActivity;
@@ -66,6 +67,21 @@ public class PictureConfig {
         // 绑定图片接口回调函数事件
         resultCallback = resultCall;
     }
+    
+    public void openPhoto(Fragment fragment, OnSelectResultCallback resultCall) {
+        if (Utils.isFastDoubleClick()) {
+            return;
+        }
+        if (options == null) {
+            options = new FunctionOptions.Builder().create();
+        }
+        Intent intent = new Intent(fragment.getContext(), PictureImageGridActivity.class);
+        intent.putExtra(FunctionConfig.EXTRA_THIS_CONFIG, options);
+        fragment.startActivity(intent);
+//        activity.overridePendingTransition(R.anim.slide_bottom_in, 0);
+        // 绑定图片接口回调函数事件
+        resultCallback = resultCall;
+    }
 
     /**
      * start to camera、preview、crop
@@ -79,6 +95,17 @@ public class PictureConfig {
         intent.putExtra(FunctionConfig.FUNCTION_TAKE, true);
         activity.startActivityForResult(intent, FunctionConfig.CAMERA_RESULT);
         activity.overridePendingTransition(R.anim.fade, R.anim.hold);
+    }
+
+    public void startOpenCamera(Fragment fragment) {
+        if (options == null) {
+            options = new FunctionOptions.Builder().create();
+        }
+        Intent intent = new Intent(fragment.getContext(), PictureImageGridActivity.class);
+        intent.putExtra(FunctionConfig.EXTRA_THIS_CONFIG, options);
+        intent.putExtra(FunctionConfig.FUNCTION_TAKE, true);
+        fragment.startActivityForResult(intent, FunctionConfig.CAMERA_RESULT);
+//        activity.overridePendingTransition(R.anim.fade, R.anim.hold);
     }
 
     /**
